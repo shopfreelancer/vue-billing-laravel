@@ -13,16 +13,15 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Customer::class, function (Faker $faker) {
+$factory->define(App\Invoice::class, function (Faker $faker) {
     return [
-        'firstname' => $faker->firstname,
-        'lastname' => $faker->lastname,
-        'email' => $faker->unique()->safeEmail,
-        'street' => $faker->streetAddress,
-        'zipcode' => $faker->postcode,
-        'city' => $faker->country,
-        'country' => $faker->country,
-        'tel' => $faker->phoneNumber,
-        'note' => $faker->sentence
+        'title' => $faker->word,
+        'invoice_number' => $faker->randomNumber(5),
+        'customer_address' => $faker->address,
+        'text_top' => $faker->sentence(8),
+        'text_bottom' => $faker->sentence(4),
+        'date' => $faker->date(),
+        'customer_id' => rand(1,50),
     ];
 });
+

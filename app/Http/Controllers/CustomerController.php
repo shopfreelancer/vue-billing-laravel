@@ -25,8 +25,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $customer = new Customer();
-        $customer->save();
+       //
     }
 
     /**
@@ -37,11 +36,17 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $activityInput = $request->all();
-        $activity = new Activity($activityInput);
-        $activity->save();
+        $customer = new Customer();
 
-        return response()->json($this->convertActivityToSnakeArray($activity));
+        $filteredInputAttributes = $this->filterAndValidateRequest($request);
+
+        foreach ($filteredInputAttributes as $key => $value) {
+            $customer->$key = $value;
+        }
+
+        $customer->save();
+
+        return response()->json($customer);
     }
 
     /**
@@ -52,7 +57,13 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Customer::find($id));
+        $customer = Customer::with('tickets')->find($id);
+
+        if(is_null($customer)){
+            return response()->json(['success' => false, 'message' => 'Customer not found.']);
+        }
+
+        return response()->json($customer);
     }
 
     /**
@@ -63,7 +74,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-
+        //
     }
 
     /**
@@ -77,7 +88,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
 
-        if(isNull($customer)){
+        if(is_null($customer)){
             return response()->json(['success' => false, 'message' => 'Customer not found.']);
         }
 

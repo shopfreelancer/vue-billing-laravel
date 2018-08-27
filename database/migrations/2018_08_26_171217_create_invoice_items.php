@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTicketsTable extends Migration
+class CreateInvoiceItems extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreateTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('invoice_items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedInteger('hours')->nullable();
-            $table->unsignedInteger('minutes')->nullable();
-            $table->unsignedInteger('status')->nullable();
-            $table->unsignedInteger('customer_id')->nullable();
+            $table->decimal('price')->nullable();
+            $table->decimal('tax_rate')->nullable();
+            $table->unsignedInteger('invoice_id')->nullable();
             $table->timestamps();
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('invoice_id')->references('id')->on('invoices');
         });
-
     }
-
-
     /**
      * Reverse the migrations.
      *
@@ -35,6 +31,6 @@ class CreateTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('invoice_items');
     }
 }

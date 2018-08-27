@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['api']], function () {
     Route::resource('/customer', 'CustomerController', [
-        //'except' => ['edit', 'show', 'store']
+        'except' => ['create', 'edit']
     ]);
+    Route::get('/invoice', 'InvoiceController@index');
+
 });

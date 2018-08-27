@@ -17,32 +17,4 @@ class CustomersTableSeeder extends Seeder
             $u->tickets()->save(factory(App\Ticket::class)->make());
         });
     }
-
-    public function generateSingleShopwareCustomerFake(){
-
-        $faker = \Faker\Factory::create();
-
-        $email = $faker->email;
-        $firstname = $faker->firstName;
-        $lastname = $faker->lastname;
-
-        $data = [
-            'email'         => $email,
-            'firstname'     => $firstname,
-            'lastname'      => $lastname,
-            'salutation' => 'mr',
-            'billing' => [
-                'email'         => $email,
-                'firstname'     => $firstname,
-                'lastname'      => $lastname,
-                'salutation' => 'mr',
-                'city'          => $faker->city,
-                'zipcode'      => $faker->postcode,
-                'street'        => $faker->streetName." ".$faker->streetAddress,
-                'country' => 2
-            ]
-
-        ];
-        return $data;
-    }
 }
