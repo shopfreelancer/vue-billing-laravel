@@ -13,9 +13,9 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Customer::class, function (Faker $faker) {
+$factory->define(App\UserAddress::class, function (Faker $faker) {
     return [
-        'company' => $faker->company,
+        'companyname' => $faker->company,
         'firstname' => $faker->firstname,
         'lastname' => $faker->lastname,
         'email' => $faker->unique()->safeEmail,
@@ -24,6 +24,9 @@ $factory->define(App\Customer::class, function (Faker $faker) {
         'city' => $faker->country,
         'country' => $faker->country,
         'tel' => $faker->phoneNumber,
-        'note' => $faker->sentence
+        'iban' => $faker->word,
+        'swift' => $faker->word,
+        'bankname' => $faker->word,
+        'tax_id' => $faker->word,
     ];
 });

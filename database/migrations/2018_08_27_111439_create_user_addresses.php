@@ -30,7 +30,9 @@ class CreateUserAddresses extends Migration
             $table->string('swift')->nullable();
             $table->string('bankname')->nullable();
             $table->string('tax_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
