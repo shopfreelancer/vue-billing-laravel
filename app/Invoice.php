@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+    protected $appends = ['sumNet','sumTaxAmount','sumTotal'];
+
     public function items(){
         return $this->hasMany('App\InvoiceItem');
     }
@@ -18,7 +20,7 @@ class Invoice extends Model
     {
         if(is_null($this->items)) return 0;
 
-        $sum = 0;
+        $sum = 0.00;
         foreach($this->items as $item){
             $sum += $item->price;
         }
@@ -29,7 +31,7 @@ class Invoice extends Model
     {
         if(is_null($this->items)) return 0;
 
-        $sum = 0;
+        $sum = 0.00;
         foreach($this->items as $item){
             $sum += $item->taxAmount;
         }

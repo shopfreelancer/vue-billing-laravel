@@ -2,6 +2,7 @@
 <head>
     <title>Rechnung</title>
     <style>
+        body { font-family: DejaVu Sans; }
         .user-address {text-align: right;}
         .invoice-number {font-weight:bold;}
         .invoice-date {text-align: right;}
@@ -29,13 +30,11 @@
 </div>
 
 <div class="customer-address">
-{{$invoice->customer->fullname}}<br/>
-{{$invoice->customer_address}}
+    {{$invoice->customer->fullname}}<br/>
+    {{$invoice->customer_address}}
 </div>
 
-<div class="invoice-date">
-    Datum {{$invoice->date}}
-</div>
+<div class="invoice-date">Datum {{$invoice->date}}</div>
 
 <div class="invoice-number">Rechnungsnummer {{$invoice->invoice_number}}</div>
 

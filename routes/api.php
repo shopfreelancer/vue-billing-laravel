@@ -22,6 +22,14 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('/customer', 'CustomerController', [
         'except' => ['create', 'edit']
     ]);
-    Route::get('/invoice', 'InvoiceController@index');
+    /*
+    Route::resource('/invoice', 'InvoiceController', [
+        'except' => ['create', 'edit']
+    ]);
+*/
+    Route::get('/invoice/test', 'InvoiceController@test');
 
+    Route::resource('/invoice-item', 'InvoiceItemController', [
+        'except' => ['create', 'edit']
+    ]);
 });

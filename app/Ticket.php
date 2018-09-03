@@ -10,9 +10,9 @@ class Ticket extends Model
     public const ACTIVE = 1;
     public const BILLED = 2;
 
-    protected $appends = ['status'];
+    protected $appends = ['namedStatus'];
 
-    public function getStatusAttribute(){
+    public function getNamedStatusAttribute(){
         $class = new \ReflectionClass(__CLASS__);
         $constants = array_flip($class->getConstants());
 
