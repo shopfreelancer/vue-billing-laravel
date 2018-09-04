@@ -22,14 +22,17 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('/customer', 'CustomerController', [
         'except' => ['create', 'edit']
     ]);
-    /*
+
+    Route::get('/invoice/generate-pdf/{id}', 'InvoiceController@generatePdf');
     Route::resource('/invoice', 'InvoiceController', [
         'except' => ['create', 'edit']
     ]);
-*/
-    Route::get('/invoice/test', 'InvoiceController@test');
 
     Route::resource('/invoice-item', 'InvoiceItemController', [
+        'except' => ['create', 'edit']
+    ]);
+
+    Route::resource('/ticket', 'TicketController', [
         'except' => ['create', 'edit']
     ]);
 });

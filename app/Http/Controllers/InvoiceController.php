@@ -8,23 +8,26 @@ use App\User;
 
 class InvoiceController extends Controller
 {
-    public function test()
+    public function generatePdf($id)
     {
-
         $user = User::with('address')->find(1);
-        $invoice = Invoice::with('items')->find(5);
+        $invoice = Invoice::with('items')->find($id);
+
+        if (is_null($invoice)) {
+            return response()->json(['success' => false, 'message' => 'Invoice not found.']);
+        }
 
         $path = app_path();
         $filepath = "data/pdf/";
         $filename = $filepath."testy.pdf";
 
-        //dd($filename);
-
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML(view('invoicePdf', ['invoice' => $invoice, 'user' => $user]));
         $pdf->save($filename);
-        return $pdf->stream();
-        return response()->json(["success" => true ]);
+
+        $headers = 'Content-Type:application/pdf';
+
+        return response()->file($filename,[$headers]);
 
     }
 
@@ -83,8 +86,6 @@ class InvoiceController extends Controller
             return response()->json(['success' => false, 'message' => 'Invoice not found.']);
         }
 
-        $this->test();
-
         return response()->json($invoice);
     }
 
@@ -133,22 +134,22 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         try {
-            $customer = Customer::findOrFail($id);
+            $invoice = Invoice::findOrFail($id);
         } catch (ModelNotFoundException $exception) {
-            return response()->json(['success' => false, 'message' => 'Customer not found.']);
+            return response()->json(['success' => false, 'message' => 'Invoice not found.']);
         }
 
-        $title = $customer->fullname;
+        $title = $invoice->title;
 
-        if ($customer->delete()) {
+        if ($invoice->items()->delete() && $invoice->delete()) {
             return response()->json(['success' => true, 'message' => $title . ' wurde gelöscht']);
         } else {
-            return response()->json(['success' => false, 'message' => 'Kunde konnte nicht gelöscht werden.']);
+            return response()->json(['success' => false, 'message' => 'Rechnung konnte nicht gelöscht werden.']);
         }
 
     }
 
-    public function filterAndValidateRequest($request)
+    public function filterAndValidateRequest(Request $request)
     {
         $uModel = new Invoice();
         $fillable = $uModel->getFillable();
@@ -160,6 +161,6 @@ class InvoiceController extends Controller
                 unset($attributes[$key]);
             }
         }
-
+        return $attributes;
     }
 }

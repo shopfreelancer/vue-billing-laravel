@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Rechnung</title>
     <style>
         body { font-family: DejaVu Sans; }

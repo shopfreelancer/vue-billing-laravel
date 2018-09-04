@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     protected $appends = ['sumNet','sumTaxAmount','sumTotal'];
+    protected $fillable = ['title','customer_address','date','text_top','text_bottom','invoice_number'];
 
     public function items(){
         return $this->hasMany('App\InvoiceItem');

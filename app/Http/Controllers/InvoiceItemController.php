@@ -104,7 +104,20 @@ class InvoiceItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $invoiceItem = InvoiceItem::findOrFail($id);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json(['success' => false, 'message' => 'Item not found.']);
+        }
+
+        $title = $invoiceItem->title;
+
+        if ($invoiceItem->delete()) {
+            return response()->json(['success' => true, 'message' => $title . ' wurde gelöscht']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Item konnte nicht gelöscht werden.']);
+        }
+
     }
 
     public function filterAndValidateRequest($request)

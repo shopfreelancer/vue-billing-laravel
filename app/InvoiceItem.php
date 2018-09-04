@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class InvoiceItem extends Model
 {
     protected $appends = ['priceWithTax','taxAmount'];
-    protected $fillable = ['title','description','tax_rate','price'];
+    protected $fillable = ['title','description','tax_rate','price','invoice_id'];
 
     public function getPriceWithTaxAttribute()
     {
