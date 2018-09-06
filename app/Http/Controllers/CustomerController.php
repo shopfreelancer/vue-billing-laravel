@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Customer;
 
-class CustomerController extends Controller
+class CustomerController extends BillingBaseController
 {
     /**
      * Display a listing of the resource.
@@ -37,13 +37,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $customer = new Customer();
-
-        $filteredInputAttributes = $this->filterAndValidateRequest($request);
-
-        foreach ($filteredInputAttributes as $key => $value) {
-            $customer->$key = $value;
-        }
-
+        $customer = $this->filterModel($request,$customer);
         $customer->save();
 
         return response()->json($customer);
@@ -92,11 +86,7 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => 'Customer not found.']);
         }
 
-        $filteredInputAttributes = $this->filterAndValidateRequest($request);
-
-        foreach ($filteredInputAttributes as $key => $value) {
-            $customer->$key = $value;
-        }
+        $customer = $this->filterModel($request,$customer);
         $customer->save();
 
         return response()->json($customer);
@@ -110,9 +100,9 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $customer = Customer::findOrFail($id);
-        } catch (ModelNotFoundException $exception) {
+        $customer = Customer::find($id);
+
+        if(is_null($customer)){
             return response()->json(['success' => false, 'message' => 'Customer not found.']);
         }
 
@@ -126,19 +116,4 @@ class CustomerController extends Controller
 
     }
 
-    public function filterAndValidateRequest($request)
-    {
-        $uModel = new Customer();
-        $fillable = $uModel->getFillable();
-
-        $attributes = $request->all();
-        foreach ($attributes as &$attribute) {
-            if (!in_array($attribute, $fillable)) {
-                unset($attribute);
-            }
-        }
-        unset($attribute);
-
-        return $attributes;
-    }
 }

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Invoice;
 use App\User;
 
-class InvoiceController extends Controller
+class InvoiceController extends BillingBaseController
 {
     public function generatePdf($id)
     {
@@ -59,17 +59,11 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $customer = new Customer();
+        $invoice = new Invoice();
+        $invoice = $this->filterModel($request,$invoice);
+        $invoice->save();
 
-        $filteredInputAttributes = $this->filterAndValidateRequest($request);
-
-        foreach ($filteredInputAttributes as $key => $value) {
-            $customer->$key = $value;
-        }
-
-        $customer->save();
-
-        return response()->json($customer);
+        return response()->json($invoice);
     }
 
     /**
@@ -115,11 +109,7 @@ class InvoiceController extends Controller
             return response()->json(['success' => false, 'message' => 'Invoice not found.']);
         }
 
-        $filteredInputAttributes = $this->filterAndValidateRequest($request);
-
-        foreach ($filteredInputAttributes as $key => $value) {
-            $invoice->$key = $value;
-        }
+        $invoice = $this->filterModel($request,$invoice);
         $invoice->save();
 
         return response()->json($invoice);
@@ -133,9 +123,9 @@ class InvoiceController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $invoice = Invoice::findOrFail($id);
-        } catch (ModelNotFoundException $exception) {
+        $invoice = Invoice::find($id);
+
+        if (is_null($invoice)) {
             return response()->json(['success' => false, 'message' => 'Invoice not found.']);
         }
 
@@ -149,18 +139,4 @@ class InvoiceController extends Controller
 
     }
 
-    public function filterAndValidateRequest(Request $request)
-    {
-        $uModel = new Invoice();
-        $fillable = $uModel->getFillable();
-
-        $attributes = $request->all();
-
-        foreach ($attributes as $key => $attribute) {
-            if (!in_array($key, $fillable)) {
-                unset($attributes[$key]);
-            }
-        }
-        return $attributes;
-    }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Ticket;
 
-class TicketController extends Controller
+class TicketController extends BillingBaseController
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,11 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ticket = new Ticket();
+        $ticket = $this->filterModel($request,$ticket);
+        $ticket->save();
+
+        return response()->json($ticket);
     }
 
     /**
@@ -69,7 +73,17 @@ class TicketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $ticket = Ticket::find($id);
+
+        if(is_null($ticket)){
+            return response()->json(['success' => false, 'message' => 'Ticket not found.']);
+        }
+
+        $ticket = $this->filterModel($request,$ticket);
+
+        $ticket->save();
+
+        return response()->json($ticket);
     }
 
     /**
@@ -80,6 +94,19 @@ class TicketController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ticket = Ticket::find($id);
+
+        if(is_null($ticket)){
+            return response()->json(['success' => false, 'message' => 'Ticket not found.']);
+        }
+
+        $title = $ticket->title;
+
+        if ($ticket->delete()) {
+            return response()->json(['success' => true, 'message' => $title . ' wurde gelöscht']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Ticket konnte nicht gelöscht werden.']);
+        }
     }
+
 }

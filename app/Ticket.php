@@ -11,6 +11,7 @@ class Ticket extends Model
     public const BILLED = 2;
 
     protected $appends = ['namedStatus'];
+    protected $fillable = ['title','description','hours','minutes','status','customer_id'];
 
     public function getNamedStatusAttribute(){
         $class = new \ReflectionClass(__CLASS__);
