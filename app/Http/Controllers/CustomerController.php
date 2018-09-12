@@ -51,7 +51,7 @@ class CustomerController extends BillingBaseController
      */
     public function show($id)
     {
-        $customer = Customer::with('tickets')->find($id);
+        $customer = Customer::with(['tickets','invoices'])->find($id);
 
         if(is_null($customer)){
             return response()->json(['success' => false, 'message' => 'Customer not found.']);

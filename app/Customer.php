@@ -12,6 +12,10 @@ class Customer extends Model
         return $this->hasMany('App\Ticket');
     }
 
+    public function invoices(){
+        return $this->hasMany('App\Invoice');
+    }
+
     public function getFullNameAttribute()
     {
         return "{$this->firstname} {$this->lastname}";
