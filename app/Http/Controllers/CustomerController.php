@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Customer;
+use App\Http\Resources\Customer as CustomerResource;
 
 class CustomerController extends BillingBaseController
 {
@@ -15,7 +16,7 @@ class CustomerController extends BillingBaseController
     public function index()
     {
         $customers = Customer::withCount('tickets')->get();
-        return response()->json($customers);
+        return CustomerResource::collection($customers);
     }
 
     /**
@@ -25,19 +26,19 @@ class CustomerController extends BillingBaseController
      */
     public function create()
     {
-       //
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $customer = new Customer();
-        $customer = $this->filterModel($request,$customer);
+        $customer = $this->filterModel($request, $customer);
         $customer->save();
 
         return response()->json($customer);
@@ -46,24 +47,24 @@ class CustomerController extends BillingBaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $customer = Customer::with(['tickets','invoices'])->find($id);
+        $customer = Customer::with(['tickets', 'invoices'])->find($id);
 
-        if(is_null($customer)){
+        if (is_null($customer)) {
             return response()->json(['success' => false, 'message' => 'Customer not found.']);
         }
 
-        return response()->json($customer);
+        return new CustomerResource($customer);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -74,19 +75,19 @@ class CustomerController extends BillingBaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $customer = Customer::find($id);
 
-        if(is_null($customer)){
+        if (is_null($customer)) {
             return response()->json(['success' => false, 'message' => 'Customer not found.']);
         }
 
-        $customer = $this->filterModel($request,$customer);
+        $customer = $this->filterModel($request, $customer);
         $customer->save();
 
         return response()->json($customer);
@@ -95,14 +96,14 @@ class CustomerController extends BillingBaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $customer = Customer::find($id);
 
-        if(is_null($customer)){
+        if (is_null($customer)) {
             return response()->json(['success' => false, 'message' => 'Customer not found.']);
         }
 

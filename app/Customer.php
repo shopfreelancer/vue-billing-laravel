@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     protected $appends = ['fullname'];
+    protected $fillable = ['firstname','lastname','street','city','zipcode'];
 
     public function tickets(){
         return $this->hasMany('App\Ticket');
