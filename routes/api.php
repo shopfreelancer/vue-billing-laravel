@@ -18,7 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 */
 
-Route::group(['middleware' => ['api']], function () {
+
+Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('/customer', 'CustomerController', [
         'except' => ['create', 'edit']
     ]);
@@ -35,4 +36,15 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('/ticket', 'TicketController', [
         'except' => ['create', 'edit']
     ]);
+
+    Route::get('/logout','Auth2Controller@logout')->name('logout');
+
+
 });
+
+Route::post('/login','Auth2Controller@login')->name('login');
+
+
+Route::options('{any?}', function () {
+    return response('', 200);
+})->where('any', '.*');

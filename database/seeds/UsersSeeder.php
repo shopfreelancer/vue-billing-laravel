@@ -14,5 +14,6 @@ class UsersSeeder extends Seeder
         factory(App\User::class, 1)->create()->each(function ($u) {
             $u->address()->save(factory(App\UserAddress::class)->make());
         });
+
     }
 }
