@@ -20,7 +20,7 @@ class Auth2Controller extends Controller
         ]);
 
         try {
-            $response = $client->post( 'oauth/token', [
+            $response = $client->post('oauth/token', [
                 'form_params' => [
                     'grant_type' => 'password',
                     'client_id' => 2,
@@ -30,38 +30,35 @@ class Auth2Controller extends Controller
                     'password' => $request->password
                 ]
             ]);
-        }
 
-        catch (RequestException $e) {
+            $responseBody = $response->getBody();
+            $body = json_decode($responseBody->getContents());
+            return response()->json(['token' => $body->access_token],200);
+
+        } catch (RequestException $e) {
 
             if ($e->hasResponse()) {
-                $statusCode = (int) $e->getResponse()->getStatusCode();
+                $statusCode = (int)$e->getResponse()->getStatusCode();
 
-                if($statusCode === 401){
+                if ($statusCode === 401) {
                     $responseBody = $e->getResponse()->getBody();
                     $body = json_decode($responseBody->getContents());
-                    $json = ['success'=> false, 'message'=> $body->message];
+                    $json = ['success' => false, 'message' => $body->message];
                 } else {
-                    $json = ['success'=> false, 'message'=> 'An error occured.'];
+                    $json = ['success' => false, 'message' => 'An error occurred.'];
                 }
 
             } else {
-                $json = ['success'=> false, 'message'=> 'An error occured.'];
+                $json = ['success' => false, 'message' => 'An error occurred.'];
             }
 
-            return response()->json($json,401);
+            return response()->json($json, 401);
         }
 
-        $responseBody = $response->getBody();
-        $body = json_decode($responseBody->getContents());
-        $json = ['success'=> true, 'token'=> $body->access_token];
-
-        return response()->json($json);
     }
 
     public function logout(Request $request)
     {
-
         $accessToken = Auth::user()->token();
 
         DB::table('oauth_refresh_tokens')

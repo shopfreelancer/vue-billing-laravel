@@ -20,9 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::resource('/customer', 'CustomerController', [
-        'except' => ['create', 'edit']
-    ]);
+    Route::apiResource('/customer', 'CustomerController');
 
     Route::get('/invoice/generate-pdf/{id}', 'InvoiceController@generatePdf');
     Route::resource('/invoice', 'InvoiceController', [
