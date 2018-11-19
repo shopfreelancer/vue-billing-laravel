@@ -42,7 +42,8 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 Route::post('/login','Auth2Controller@login')->name('login');
 
-
+/*
 Route::options('{any?}', function () {
     return response('', 200);
 })->where('any', '.*');
+*/
